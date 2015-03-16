@@ -4,20 +4,12 @@ module.exports = function ( grunt ) {
    * Load required Grunt tasks. These are installed based on the versions listed
    * in `package.json` when you do `npm install` in this directory.
    */
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-coffee');
-  grunt.loadNpmTasks('grunt-contrib-less');
-  grunt.loadNpmTasks('grunt-conventional-changelog');
-  grunt.loadNpmTasks('grunt-bump');
-  grunt.loadNpmTasks('grunt-coffeelint');
-  grunt.loadNpmTasks('grunt-karma');
-  grunt.loadNpmTasks('grunt-ng-annotate');
-  grunt.loadNpmTasks('grunt-html2js');
+
+    // Load grunt tasks automatically
+  require('load-grunt-tasks')(grunt);
+
+  // Time how long tasks take. Can help when optimizing build times
+  require('time-grunt')(grunt);
 
   /**
    * Load in our build configuration file.
@@ -219,6 +211,31 @@ module.exports = function ( grunt ) {
         src: [ '<%= app_files.coffee %>' ],
         dest: '<%= build_dir %>',
         ext: '.js'
+      }
+    },
+
+    // The actual grunt server settings
+    connect: {
+      options: {
+        port: 9004,
+        // Change this to '0.0.0.0' to access the server from outside.
+        hostname: 'localhost',
+        livereload: 35731
+      },
+      livereload: {
+        options: {
+          open: true,
+          middleware: function (connect) {
+            return [
+              connect.static('.tmp'),
+              connect().use(
+                '/bower_components',
+                connect.static('./bower_components')
+              ),
+              connect.static('build')
+            ];
+          }
+        }
       }
     },
 
@@ -442,7 +459,7 @@ module.exports = function ( grunt ) {
        * plugin should auto-detect.
        */
       options: {
-        livereload: true
+        livereload: '<%= connect.options.livereload %>'
       },
 
       /**
@@ -450,11 +467,7 @@ module.exports = function ( grunt ) {
        * your Gruntfile changes, it will automatically be reloaded!
        */
       gruntfile: {
-        files: 'Gruntfile.js',
-        tasks: [ 'jshint:gruntfile' ],
-        options: {
-          livereload: false
-        }
+        files: 'Gruntfile.js'
       },
 
       /**
@@ -462,7 +475,7 @@ module.exports = function ( grunt ) {
        * run our unit tests.
        */
       jssrc: {
-        files: [ 
+        files: [
           '<%= app_files.js %>'
         ],
         tasks: [ 'jshint:src', 'karma:unit:run', 'copy:build_appjs' ]
@@ -472,23 +485,23 @@ module.exports = function ( grunt ) {
        * When our CoffeeScript source files change, we want to run lint them and
        * run our unit tests.
        */
-      coffeesrc: {
-        files: [ 
-          '<%= app_files.coffee %>'
-        ],
-        tasks: [ 'coffeelint:src', 'coffee:source', 'karma:unit:run', 'copy:build_appjs' ]
-      },
+//      coffeesrc: {
+//        files: [
+//          '<%= app_files.coffee %>'
+//        ],
+//        tasks: [ 'coffeelint:src', 'coffee:source', 'karma:unit:run', 'copy:build_appjs' ]
+//      },
 
       /**
        * When assets are changed, copy them. Note that this will *not* copy new
        * files, so this is probably not very useful.
        */
-      assets: {
-        files: [ 
-          'src/assets/**/*'
-        ],
-        tasks: [ 'copy:build_app_assets', 'copy:build_vendor_assets' ]
-      },
+//      assets: {
+//        files: [
+//          'src/assets/**/*'
+//        ],
+//        tasks: [ 'copy:build_app_assets', 'copy:build_vendor_assets' ]
+//      },
 
       /**
        * When index.html changes, we need to compile it.
@@ -529,20 +542,6 @@ module.exports = function ( grunt ) {
         options: {
           livereload: false
         }
-      },
-
-      /**
-       * When a CoffeeScript unit test file changes, we only want to lint it and
-       * run the unit tests. We don't want to do any live reloading.
-       */
-      coffeeunit: {
-        files: [
-          '<%= app_files.coffeeunit %>'
-        ],
-        tasks: [ 'coffeelint:test', 'karma:unit:run' ],
-        options: {
-          livereload: false
-        }
       }
     }
   };
@@ -557,7 +556,7 @@ module.exports = function ( grunt ) {
    * before watching for changes.
    */
   grunt.renameTask( 'watch', 'delta' );
-  grunt.registerTask( 'watch', [ 'build', 'karma:unit', 'delta' ] );
+  grunt.registerTask( 'watch', [ 'build', 'karma:unit', 'connect:livereload', 'delta' ] );
 
   /**
    * The default task is to build and compile.
