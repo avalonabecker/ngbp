@@ -1,0 +1,26 @@
+<div class="col-md-12">
+    <div class="row">
+      <h1 class="page-header">Edit Resume</h1>
+        <!-- click-edit-link http://plnkr.co/edit/EsW7mV?p=preview -->
+        <!-- plus button http://plnkr.co/edit/xUDrOS?p=preview -->
+        <!-- http://vitalets.github.io/angular-xeditable/ -->
+
+        <div ng-controller="EditCtrl">
+            <div class="contact-header">
+                <h1>{{resume.ContactInfo.PersonName.GivenName}} {{resume.ContactInfo.PersonName.FamilyName}}</h1>
+                <h2>{{resume.EmploymentHistory.EmployerOrg.EmployerOrgName}}</h2>
+                <h2>{{resume.EmploymentHistory.EmployerOrg.PositionHistory[0].Title || 'Senior Consultant'}}</h2>
+            </div>
+
+            <h2>Experience</h2>
+            <div class="exper">
+                <div ng-repeat="">
+                    <a href="#" editable-text="">{{ resume.ContactInfo.PersonName.GivenName || "empty" }}</a>
+                    <a href="#" editable-text="">{{ resume.ContactInfo.PersonName.FamilyName || "empty" }}</a>
+                </div>
+            </div>
+            {{ resume }}
+        </div>
+
+    </div>
+</div>

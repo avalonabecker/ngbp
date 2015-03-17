@@ -9,6 +9,7 @@ module.exports = function ( karma ) {
      * This is the list of file patterns to load into the browser during testing.
      */
     files: [
+      'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.27/angular.min.js',
       <% scripts.forEach( function ( file ) { %>'<%= file %>',
       <% }); %>
       'src/**/*.js',
