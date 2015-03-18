@@ -67,7 +67,12 @@ module.exports = {
       'vendor/placeholders/angular-placeholders-0.0.1-SNAPSHOT.min.js',
       'vendor/angular-ui-router/release/angular-ui-router.js',
       'vendor/angular-ui-utils/modules/route/route.js',
-      'vendor/angular-xeditable/dist/js/xeditable.js'
+      'vendor/angular-xeditable/dist/js/xeditable.js',
+      'vendor/sugar/release/sugar.min.js',
+      'vendor/ckeditor/ckeditor.js'
+    ],
+    dirs: [
+      'vendor/ckeditor/**'
     ],
     css: [
       'vendor/angular-xeditable/dist/css/xeditable.css'

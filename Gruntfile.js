@@ -85,7 +85,7 @@ module.exports = function ( grunt ) {
     ],
 
     /**
-     * The `copy` task just copies files from A to B. We use it here to copy
+     * The `grunt-contrib-copy` task just copies files from A to B. We use it here to copy
      * our project assets (images, fonts, etc.) and javascripts into
      * `build_dir`, and then to copy the assets to `compile_dir`.
      */
@@ -115,6 +115,16 @@ module.exports = function ( grunt ) {
         files: [
           {
             src: [ '<%= app_files.js %>' ],
+            dest: '<%= build_dir %>/',
+            cwd: '.',
+            expand: true
+          }
+        ]
+      },
+      build_vendordirs: {
+        files: [
+          {
+            src: [ '<%= vendor_files.dirs %>' ],
             dest: '<%= build_dir %>/',
             cwd: '.',
             expand: true
@@ -577,7 +587,7 @@ module.exports = function ( grunt ) {
   grunt.registerTask( 'build', [
     'clean', 'html2js', 'less:build',
     'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
-    'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendorcss', 'index:build'
+    'copy:build_appjs', 'copy:build_vendordirs', 'copy:build_vendorjs', 'copy:build_vendorcss', 'index:build'
   ]);
 
 

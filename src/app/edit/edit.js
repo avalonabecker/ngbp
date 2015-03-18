@@ -27,12 +27,25 @@ angular.module( 'resumeWrangler.edit', [
 
   resumeCRUDService.fetchResume('abraham_becker').then(function(resp){
     $scope.resume = resp.data.Resume.StructuredXMLResume;
+
+    //Position History
+    //if the first position is the global employee description, only show the rest
+    var orgOneName = $scope.resume.EmploymentHistory.EmployerOrg.PositionHistory[0].OrgName.OrganizationName;
+    if (orgOneName === 'General Skills Description'){
+      $scope.positionHistory = $scope.resume.EmploymentHistory.EmployerOrg.PositionHistory.from(1);
+    } else {
+      $scope.positionHistory = $scope.resume.EmploymentHistory.EmployerOrg.PositionHistory;
+    }
+
   });
 
   $scope.user = {
     name: 'awesome user'
   };
 
+  $scope.text = function($scope){
+    $scope.text = 'this is text';
+  }
     //resumeCRUDService.fetchResume('abraham_becker');
 
   });
